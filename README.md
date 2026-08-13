@@ -69,7 +69,7 @@ gcloud init
 Verifica que el proyecto correcto esté activo:
 
 ```cmd
-gcloud config set project cicdtraining-498421
+gcloud config set project my-demo-505323
 gcloud config list
 ```
 
@@ -110,19 +110,19 @@ gcloud iam service-accounts create github-actions-sa --display-name="GitHub Acti
 **Permiso para desplegar en Cloud Run:**
 
 ```cmd
-gcloud projects add-iam-policy-binding cicdtraining-498421 --member="serviceAccount:github-actions-sa@cicdtraining-498421.iam.gserviceaccount.com" --role="roles/run.admin"
+gcloud projects add-iam-policy-binding my-demo-505323 --member="serviceAccount:github-actions-sa@my-demo-505323.iam.gserviceaccount.com" --role="roles/run.admin"
 ```
 
 **Permiso para subir imágenes a Artifact Registry:**
 
 ```cmd
-gcloud projects add-iam-policy-binding cicdtraining-498421 --member="serviceAccount:github-actions-sa@cicdtraining-498421.iam.gserviceaccount.com" --role="roles/artifactregistry.writer"
+gcloud projects add-iam-policy-binding my-demo-505323 --member="serviceAccount:github-actions-sa@my-demo-505323.iam.gserviceaccount.com" --role="roles/artifactregistry.writer"
 ```
 
 **Permiso para actuar como Service Account:**
 
 ```cmd
-gcloud projects add-iam-policy-binding cicdtraining-498421 --member="serviceAccount:github-actions-sa@cicdtraining-498421.iam.gserviceaccount.com" --role="roles/iam.serviceAccountUser"
+gcloud projects add-iam-policy-binding my-demo-505323 --member="serviceAccount:github-actions-sa@my-demo-505323.iam.gserviceaccount.com" --role="roles/iam.serviceAccountUser"
 ```
 
 ---
@@ -134,9 +134,8 @@ Permite que GitHub Actions se autentique con Google Cloud sin necesidad de clave
 **Obtener el número del proyecto:**
 
 ```cmd
-gcloud projects describe cicdtraining-498421 --format="value(projectNumber)"
+gcloud projects describe my-demo-505323 --format="value(projectNumber)"
 ```
-
 **Crear el Identity Pool:**
 
 ```cmd
@@ -152,7 +151,7 @@ gcloud iam workload-identity-pools providers create-oidc "github-provider" --loc
 **Vincular el Service Account al pool:**
 
 ```cmd
-gcloud iam service-accounts add-iam-policy-binding github-actions-sa@cicdtraining-498421.iam.gserviceaccount.com --role="roles/iam.workloadIdentityUser" --member="principalSet://iam.googleapis.com/projects/622078306811/locations/global/workloadIdentityPools/github-pool/attribute.repository_owner/mafeopa"
+gcloud iam service-accounts add-iam-policy-binding github-actions-sa@my-demo-505323.iam.gserviceaccount.com --role="roles/iam.workloadIdentityUser" --member="principalSet://iam.googleapis.com/projects/1014662180227/locations/global/workloadIdentityPools/github-pool/attribute.repository_owner/mafeopa"
 ```
 
 **Obtener el nombre completo del provider** (necesario como secreto en GitHub):
@@ -174,9 +173,9 @@ Ve a tu repositorio → **Settings → Secrets and variables → Actions → New
 
 | Nombre | Valor |
 |--------|-------|
-| `GCP_PROJECT_ID` | `cicdtraining-498421` |
+| `GCP_PROJECT_ID` | `my-demo-505323` |
 | `WIF_PROVIDER` | `projects/622078306811/locations/global/workloadIdentityPools/github-pool/providers/github-provider` |
-| `WIF_SERVICE_ACCOUNT` | `github-actions-sa@cicdtraining-498421.iam.gserviceaccount.com` |
+| `WIF_SERVICE_ACCOUNT` | `github-actions-sa@my-demo-505323.iam.gserviceaccount.com` |
 
 ---
 
@@ -314,13 +313,13 @@ Haz push a `main` y ve a la pestaña **Actions** en GitHub para ver el pipeline 
 Una vez verde, obtén la URL del servicio:
 
 ```cmd
-gcloud run services describe mi-app --region=us-central1 --project=cicdtraining-498421 --format="value(status.url)"
+gcloud run services describe mi-app --region=us-central1 --project=my-demo-505323 --format="value(status.url)"
 ```
 
 Si recibes error `403`, habilita el acceso público:
 
 ```cmd
-gcloud run services add-iam-policy-binding mi-app --region=us-central1 --project=cicdtraining-498421 --member="allUsers" --role="roles/run.invoker"
+gcloud run services add-iam-policy-binding mi-app --region=us-central1 --project=my-demo-505323 --member="allUsers" --role="roles/run.invoker"
 ```
 
 Abre la URL en el navegador y deberías ver:
@@ -332,7 +331,7 @@ Hola desde Cloud Run 🚀
 Ver logs del servicio:
 
 ```cmd
-gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=mi-app" --limit=20 --project=cicdtraining-498421 --format="value(textPayload)"
+gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=mi-app" --limit=20 --project=my-demo-505323 --format="value(textPayload)"
 ```
 
 ---
