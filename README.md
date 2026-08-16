@@ -359,3 +359,4 @@ gcloud logging read "resource.type=cloud_run_revision AND resource.labels.servic
 ---
 
 *Universidad de Boyacá • 2026 • github.com/mafeopa*
+deploy de prueba jorecof.
